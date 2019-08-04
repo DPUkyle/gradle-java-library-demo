@@ -9,9 +9,6 @@ repositories {
 }
 
 dependencies {    
-    // normal dependency on ivy module allows leaking runtime dependencies onto compile classpath
-    implementation group: 'com.sample.producer', name: 'producer', version: '1.0'
-
-    // declaring dependency on "compile" configuration avoids the leak:
-    //implementation group: 'com.sample.producer', name: 'producer', version: '1.0', configuration: 'compile'
+    // uncommenting the "configuration" setting below prevents leaking compile dependencies
+    implementation group: 'com.sample.producer', name: 'producer', version: '1.0' // , configuration: 'compile'
 }
