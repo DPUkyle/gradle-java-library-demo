@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {    
+    implementation group: 'com.sample.producer', name: 'producer', version: '1.0'
+}
