@@ -1,6 +1,6 @@
 # Classpath isolation demo
 
-The 3 projects demonstrate "implementation" vs. "api" classpath isolation by Gradle "java-library" plugin. Note that this works out of the box only for Maven, not for ivy consumers.
+The 3 projects demonstrate ["implementation" vs. "api" classpath isolation](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_separation) by Gradle's "java-library" plugin. Note that this works out of the box only for Maven, not for ivy consumers.
 
 ## Use case
 
