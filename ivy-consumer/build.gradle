@@ -10,5 +10,5 @@ repositories {
 
 dependencies {    
     // uncommenting the "configuration" setting below prevents leaking compile dependencies
-    implementation group: 'com.sample.producer', name: 'producer', version: '1.0' // , configuration: 'compile'
+    implementation group: 'com.sample.producer', name: 'producer', version: '1.1' // , configuration: 'compile'
 }
