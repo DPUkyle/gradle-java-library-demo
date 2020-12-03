@@ -10,5 +10,34 @@ repositories {
 
 dependencies {    
     // uncommenting the "configuration" setting below prevents leaking compile dependencies
-    implementation group: 'com.sample.producer', name: 'producer', version: '1.0' // , configuration: 'compile'
+    implementation group: 'com.sample.producer', name: 'producer', version: '1.1' // , configuration: 'compile'
+
+    components { all(IvyVariantDerivationRule) }
+}
+
+class IvyVariantDerivationRule implements ComponentMetadataRule {
+    @javax.inject.Inject
+    ObjectFactory getObjects() { }
+
+    void execute(ComponentMetadataContext context) {
+        // This filters out any non Ivy module
+        if(context.getDescriptor(IvyModuleDescriptor) == null) {
+            return
+        }
+
+        context.details.addVariant('runtimeElements', 'default') {
+            attributes {
+                attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+                attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            }
+        }
+        context.details.addVariant('apiElements', 'compile') {
+            attributes {
+                attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+                attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_API))
+            }
+        }
+    }
 }

@@ -30,3 +30,9 @@ Ivy consumer does not fail compilation by default. Reproduce:
 cd ivy-consumer
 ./gradlew build
 ```
+
+## Updated 2020-12-03
+
+Ivy consumer now fails compilation, thanks to the addition of a ComponentMetadataRule which maps the `default` ivy configuration to `runtimeElements`, and the `compile` ivy configuration to the `apiElements`.
+
+Note that I also disabled module metadata generation.
