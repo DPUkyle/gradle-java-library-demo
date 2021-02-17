@@ -3,10 +3,13 @@
  */
 package com.sample.consumer;
 
-import com.google.common.collect.Multiset;
+//import com.google.common.collect.Multiset;
+import com.sample.producer.Library;
 
 
-public class Library {
+public class LibraryImpl implements Library {
+
+    @Override
     public boolean someLibraryMethod() {
         return true;
     }

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.sample.producer"
-version = "1.1"
+version = "1.2"
 
 // do not publish .module files for now
 tasks.withType(GenerateModuleMetadata) {
@@ -29,7 +29,17 @@ publishing {
         }
         ivy(IvyPublication) {
             from components.java
-        }        
+            // put "primary" artifact on the master configuration
+            configurations.create 'master'
+            descriptor {
+                withXml {
+                    def root = it.asNode()
+                    def publications = root.publications ? root.publications[0] : root.appendNode('publications')
+                    // hack - sets the sole artifact's conf attribute to be "master" (was: "compile, runtime")
+                    publications.artifact[0].@conf = 'master'
+                }
+            }
+        }
     }
     repositories {
         ivy {

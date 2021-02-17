@@ -2,37 +2,16 @@
 
 The 3 projects demonstrate ["implementation" vs. "api" classpath isolation](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_separation) by Gradle's "java-library" plugin. Note that this works out of the box only for Maven, not for ivy consumers.
 
-## Use case
+# Updated 2021-02-16 showing failure when using unconventional Ivy setup
 
-- "producer" project is a java library that has "implementation" dependency on guava
-- "consumer" projects attempt to compile against "guava" without explicit "guava" compile dependency
-- building producer (needed to reproduce):
+In this example, we have difficulty deriving `apiElements`/`runtimeElements` variants from Ivy metadata when the "primary"
+artifact is not on the `compile`, `runtime` or `default` configurations.  In this example we hack the `producer` project to manipulate 
+the descriptor, associating its sole artifact with the `master` configuration.
 
-```
-cd producer
-./gradlew publishToMavenLocal publishIvyPublicationToIvyRepo
-```
+Note that when building the `ivy-consumer` jar, the parent interface cannot be found and classpath logging in the console shows
+that the `apiElements` variant is correctly derived, but is missing the "primary" producer.jar artifact.
 
-### Maven
+## Steps to reproduce
 
-Maven consumer correctly fails compilation. Reproduce:
-
-```
-cd maven-consumer
-./gradlew build
-```
-
-### Ivy
-
-Ivy consumer does not fail compilation by default. Reproduce:
-
-```
-cd ivy-consumer
-./gradlew build
-```
-
-## Updated 2020-12-03
-
-Ivy consumer now fails compilation, thanks to the addition of a ComponentMetadataRule which maps the `default` ivy configuration to `runtimeElements`, and the `compile` ivy configuration to the `apiElements`.
-
-Note that I also disabled module metadata generation.
+1. `cd producer`, then `./gradlew publishIvyPublicationToIvyRepo`. Note contents of descriptor at `less ~/local-ivy-repo/com.sample.producer/producer/1.2/ivy-1.2.xml`
+2. `cd ivy-consumer`, then `./gradlew assemble`.  Note the echoed CompileJava#classpath does not contain `producer.jar`.
